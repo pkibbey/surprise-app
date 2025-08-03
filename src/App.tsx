@@ -55,7 +55,8 @@ const secretSurprises: Surprise[] = [
   { type: "🔮 Secret Vision", content: "You've discovered the hidden realm! You possess the rare gift of seeing beyond the ordinary into pure magic! The unicorns have chosen you as a keeper of secrets! 🦄👑", emoji: "🔮", color: "#8A2BE2", gradient: "linear-gradient(135deg, #8A2BE2, #9932CC, #BA55D3, #DDA0DD)" },
   { type: "👑 Royal Unicorn", content: "CONGRATULATIONS! You are now an honorary member of the Royal Unicorn Council! Your secret power: the ability to see magic in everything! 🦄✨👑", emoji: "👑", color: "#FFD700", gradient: "linear-gradient(135deg, #FFD700, #FFA500, #FF69B4, #8A2BE2)" },
   { type: "🌟 Cosmic Secret", content: "LEGENDARY DISCOVERY: You've unlocked the Cosmic Unicorn frequency! Legend says only 1 in 1000 beings can find this. You're truly special! 🌌🦄💫", emoji: "🌌", color: "#4B0082", gradient: "linear-gradient(135deg, #4B0082, #8A2BE2, #DA70D6, #FFB6C1)" },
-  { type: "🗝️ Ancient Magic", content: "THE ULTIMATE SECRET: You hold the key to the Ancient Unicorn Library! Hidden knowledge flows through you. Guard this magic well, chosen one! 📚🦄🗝️", emoji: "🗝️", color: "#800080", gradient: "linear-gradient(135deg, #800080, #9932CC, #FF69B4, #FFD700)" },
+  { type: "� Cosmic Elephant", content: "EXTRAORDINARY ENCOUNTER: The Cosmic Elephant has descended from the stars to share ancient wisdom! Its trunk carries stardust and its memory holds the secrets of galaxies! 🐘🌌✨", emoji: "🐘", color: "#483D8B", gradient: "linear-gradient(135deg, #483D8B, #6A5ACD, #9370DB, #BA55D3, #00CED1)" },
+  { type: "�🗝️ Ancient Magic", content: "THE ULTIMATE SECRET: You hold the key to the Ancient Unicorn Library! Hidden knowledge flows through you. Guard this magic well, chosen one! 📚🦄🗝️", emoji: "🗝️", color: "#800080", gradient: "linear-gradient(135deg, #800080, #9932CC, #FF69B4, #FFD700)" },
   { type: "💎 Crystal Power", content: "MYSTICAL ACHIEVEMENT UNLOCKED: The Crystal Unicorns have blessed you with infinite sparkle power! Your aura now shimmers with secret rainbow energy! 💎🦄🌈", emoji: "💎", color: "#C71585", gradient: "linear-gradient(135deg, #C71585, #FF1493, #FF69B4, #DDA0DD, #00CED1)" },
 ]
 
@@ -86,7 +87,7 @@ function App() {
   // The famous Konami code sequence
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA']
 
-  const particleEmojis = ['🦄', '✨', '🌟', '⭐', '💫', '�', '💖', '💝', '🔮', '�‍♀️', '�', '☁️', '💜', '�']
+  const particleEmojis = ['🦄', '✨', '🌟', '⭐', '💫', '🌙', '💖', '💝', '🔮', '🧙‍♀️', '🌈', '☁️', '💜', '🌸', '🐘']
   const happinessEmojis = ['💧', '💎', '💝', '💖', '✨', '🌟', '💫', '🔮', '🌈', '🦄']
 
   // Create happiness drops
@@ -199,7 +200,7 @@ function App() {
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
                 size: Math.random() * 30 + 15,
-                emoji: ['🔮', '👑', '🌌', '🗝️', '💎', '🦄', '✨'][Math.floor(Math.random() * 7)],
+                emoji: ['🔮', '👑', '🌌', '🗝️', '💎', '🦄', '✨', '🐘'][Math.floor(Math.random() * 8)],
                 velocity: {
                   x: (Math.random() - 0.5) * 4,
                   y: (Math.random() - 0.5) * 4
