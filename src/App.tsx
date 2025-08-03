@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 interface Surprise {
@@ -21,30 +21,33 @@ interface Particle {
 }
 
 const surprises: Surprise[] = [
-  { type: "Quote", content: "The only way to do great work is to love what you do. - Steve Jobs", emoji: "💭", color: "#FF6B6B", gradient: "linear-gradient(135deg, #FF6B6B, #FF8E53)" },
-  { type: "Activity", content: "Take a 10-minute walk outside and count how many different birds you can spot", emoji: "🐦", color: "#4ECDC4", gradient: "linear-gradient(135deg, #4ECDC4, #44A08D)" },
-  { type: "Fun Fact", content: "Honey never spoils! Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible.", emoji: "🍯", color: "#45B7D1", gradient: "linear-gradient(135deg, #45B7D1, #96C93D)" },
-  { type: "Challenge", content: "Try writing your name with your non-dominant hand", emoji: "✍️", color: "#96CEB4", gradient: "linear-gradient(135deg, #96CEB4, #FFECD2)" },
-  { type: "Compliment", content: "You have a wonderful curiosity about the world that makes you truly special!", emoji: "⭐", color: "#FFEAA7", gradient: "linear-gradient(135deg, #FFEAA7, #FDBB2D)" },
-  { type: "Activity", content: "Make a paper airplane and see how far it can fly", emoji: "✈️", color: "#DDA0DD", gradient: "linear-gradient(135deg, #DDA0DD, #B19CD9)" },
-  { type: "Recipe", content: "Quick snack: Mix peanut butter with honey and spread on crackers", emoji: "🥜", color: "#F39C12", gradient: "linear-gradient(135deg, #F39C12, #F1C40F)" },
-  { type: "Meditation", content: "Close your eyes and take 5 deep breaths, focusing only on the sensation of breathing", emoji: "🧘", color: "#E17055", gradient: "linear-gradient(135deg, #E17055, #FDA085)" },
-  { type: "Fun Fact", content: "A group of flamingos is called a 'flamboyance'", emoji: "🦩", color: "#FF7675", gradient: "linear-gradient(135deg, #FF7675, #FD79A8)" },
-  { type: "Creative", content: "Draw something using only circles and triangles", emoji: "🎨", color: "#A29BFE", gradient: "linear-gradient(135deg, #A29BFE, #6C5CE7)" },
-  { type: "Gratitude", content: "Think of three things you're grateful for right now", emoji: "🙏", color: "#00B894", gradient: "linear-gradient(135deg, #00B894, #00CEC9)" },
-  { type: "Movement", content: "Do 10 jumping jacks to get your blood flowing", emoji: "🏃", color: "#00CEC9", gradient: "linear-gradient(135deg, #00CEC9, #74B9FF)" },
-  { type: "Discovery", content: "Look up at the sky and find three different cloud shapes", emoji: "☁️", color: "#74B9FF", gradient: "linear-gradient(135deg, #74B9FF, #0984E3)" },
-  { type: "Kindness", content: "Send a thoughtful message to someone you care about", emoji: "💝", color: "#FD79A8", gradient: "linear-gradient(135deg, #FD79A8, #E84393)" },
-  { type: "Adventure", content: "Try a new route to somewhere you go regularly", emoji: "🗺️", color: "#FDCB6E", gradient: "linear-gradient(135deg, #FDCB6E, #E17055)" },
+  { type: "Magic Quote", content: "Believe in the magic within you - every unicorn started as a dream! 🦄", emoji: "🦄", color: "#FF69B4", gradient: "linear-gradient(135deg, #FF69B4, #FF1493, #DA70D6)" },
+  { type: "Enchanted Activity", content: "Find a rainbow in your day - look through a prism, water droplets, or soap bubbles!", emoji: "🌈", color: "#FFB6C1", gradient: "linear-gradient(135deg, #FFB6C1, #FF69B4, #DDA0DD)" },
+  { type: "Unicorn Fact", content: "Did you know? The spiral horn of a unicorn is called an 'alicorn' and it's said to have healing powers!", emoji: "🦄", color: "#E6E6FA", gradient: "linear-gradient(135deg, #E6E6FA, #DDA0DD, #DA70D6)" },
+  { type: "Magic Challenge", content: "Cast a kindness spell - do something unexpectedly nice for someone today!", emoji: "✨", color: "#FFB6C1", gradient: "linear-gradient(135deg, #FFB6C1, #F0E68C, #98FB98)" },
+  { type: "Sparkle Compliment", content: "You sparkle brighter than any unicorn's horn! Your magic touches everyone around you! ✨", emoji: "💖", color: "#FF1493", gradient: "linear-gradient(135deg, #FF1493, #FF69B4, #FFB6C1)" },
+  { type: "Rainbow Activity", content: "Create your own rainbow - use crayons, paint, or even colorful food to make something beautiful!", emoji: "🎨", color: "#FF6347", gradient: "linear-gradient(135deg, #FF6347, #FFD700, #ADFF2F, #00CED1, #FF69B4)" },
+  { type: "Magical Recipe", content: "Unicorn smoothie: Blend banana, berries, yogurt, and a tiny bit of edible glitter or colorful fruit!", emoji: "�", color: "#FFB6C1", gradient: "linear-gradient(135deg, #FFB6C1, #F0E68C, #98FB98)" },
+  { type: "Enchanted Meditation", content: "Close your eyes and imagine riding a unicorn through clouds of cotton candy and rainbow mist", emoji: "🧘‍♀️", color: "#DDA0DD", gradient: "linear-gradient(135deg, #DDA0DD, #E6E6FA, #F0E68C)" },
+  { type: "Magical Fact", content: "Unicorns are said to only appear to those who believe in magic - and you're seeing this, so... ✨", emoji: "�", color: "#DA70D6", gradient: "linear-gradient(135deg, #DA70D6, #FF69B4, #FFB6C1)" },
+  { type: "Creative Magic", content: "Draw a unicorn using only your imagination - no rules, just pure magical creativity!", emoji: "🎨", color: "#FF69B4", gradient: "linear-gradient(135deg, #FF69B4, #DDA0DD, #E6E6FA)" },
+  { type: "Gratitude Sparkles", content: "Think of three magical moments from your life that made you feel like anything was possible", emoji: "🙏", color: "#FFB6C1", gradient: "linear-gradient(135deg, #FFB6C1, #F0E68C, #98FB98)" },
+  { type: "Unicorn Dance", content: "Do a happy unicorn dance - prance, twirl, and let your inner magic shine through movement!", emoji: "💃", color: "#FF1493", gradient: "linear-gradient(135deg, #FF1493, #FF69B4, #DDA0DD)" },
+  { type: "Rainbow Discovery", content: "Look for hidden rainbows - in soap bubbles, oil puddles, or light through windows!", emoji: "🌈", color: "#FFD700", gradient: "linear-gradient(135deg, #FFD700, #FF69B4, #DDA0DD, #98FB98)" },
+  { type: "Magic Kindness", content: "Sprinkle kindness like fairy dust - leave a sweet note for someone to find!", emoji: "💝", color: "#FF69B4", gradient: "linear-gradient(135deg, #FF69B4, #FFB6C1, #F0E68C)" },
+  { type: "Enchanted Adventure", content: "Take a magical mystery walk - let your intuition guide you to somewhere new and wonderful!", emoji: "🗺️", color: "#DDA0DD", gradient: "linear-gradient(135deg, #DDA0DD, #FF69B4, #FFB6C1)" },
+  { type: "Unicorn Wisdom", content: "Remember: You are magical exactly as you are - no horn required! 🦄✨", emoji: "🌟", color: "#E6E6FA", gradient: "linear-gradient(135deg, #E6E6FA, #DDA0DD, #FF69B4)" },
 ]
 
 const motivationalMessages = [
-  "You're doing amazing! ✨",
-  "Keep exploring! 🚀",
-  "You're awesome! 🌟",
-  "Stay curious! 🔍",
-  "You've got this! 💪",
-  "Keep shining! ☀️"
+  "You're absolutely magical! 🦄✨",
+  "Keep sparkling, unicorn! 🌟�",
+  "Your magic is extraordinary! 🦄�",
+  "Stay enchanted, beautiful soul! ✨�",
+  "You've got unicorn power! 🦄💪",
+  "Keep shining like stardust! ⭐🌙",
+  "Magical things happen to magical people! 🦄✨",
+  "Your sparkle lights up the world! 💖🌟"
 ]
 
 function App() {
@@ -53,9 +56,8 @@ function App() {
   const [message, setMessage] = useState("")
   const [surpriseCount, setSurpriseCount] = useState(0)
   const [particles, setParticles] = useState<Particle[]>([])
-  const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const particleEmojis = ['✨', '🌟', '⭐', '💫', '🎉', '🎊', '💝', '🦋', '🌈', '🔮']
+  const particleEmojis = ['🦄', '✨', '🌟', '⭐', '💫', '�', '💖', '💝', '🔮', '�‍♀️', '�', '☁️', '💜', '�']
 
   // Create particles
   const createParticles = () => {
@@ -101,7 +103,7 @@ function App() {
 
   useEffect(() => {
     // Welcome message
-    setMessage("Welcome to your Surprise App! 🎉")
+    setMessage("Welcome to your Magical Unicorn Adventure! 🦄✨")
   }, [])
 
   const generateSurprise = () => {
@@ -123,7 +125,7 @@ function App() {
   const resetApp = () => {
     setCurrentSurprise(null)
     setSurpriseCount(0)
-    setMessage("Ready for a new adventure! 🎯")
+    setMessage("Ready for a new magical adventure! 🦄�")
     setParticles([])
   }
 
@@ -151,18 +153,18 @@ function App() {
       
       <header className="app-header">
         <h1 className="app-title">
-          <span className="emoji">🎁</span>
-          Surprise App
-          <span className="emoji">🎁</span>
+          <span className="emoji">🦄</span>
+          Magical Unicorn App
+          <span className="emoji">🦄</span>
         </h1>
-        <p className="app-subtitle">Discover something wonderful!</p>
+        <p className="app-subtitle">Discover enchanted surprises and rainbow magic!</p>
       </header>
 
       <main className="app-main">
         <div className="message-container">
           <p className="motivational-message">{message}</p>
           <div className="surprise-counter">
-            Surprises discovered: <span className="count">{surpriseCount}</span>
+            Magical discoveries: <span className="count">{surpriseCount}</span> 🦄
           </div>
         </div>
 
@@ -186,12 +188,12 @@ function App() {
             </div>
           ) : (
             <div className="welcome-card">
-              <div className="welcome-emoji">🌟</div>
-              <p>Click the button below to discover your first surprise!</p>
+              <div className="welcome-emoji">🦄</div>
+              <p>Click the magical button below to discover your first enchanted surprise!</p>
               <div className="welcome-sparkles">
-                <span>✨</span>
+                <span>🌟</span>
                 <span>💫</span>
-                <span>⭐</span>
+                <span>✨</span>
               </div>
             </div>
           )}
@@ -205,14 +207,14 @@ function App() {
           >
             {isAnimating ? (
               <span className="loading">
-                <span className="loading-emoji">🎲</span>
-                Generating Magic...
+                <span className="loading-emoji">🦄</span>
+                Creating Magic...
               </span>
             ) : (
               <>
-                <span className="button-emoji">✨</span>
+                <span className="button-emoji">🦄</span>
                 Surprise Me!
-                <span className="button-emoji">✨</span>
+                <span className="button-emoji">🦄</span>
               </>
             )}
           </button>
@@ -222,18 +224,18 @@ function App() {
               className="reset-button"
               onClick={resetApp}
             >
-              🔄 Start Over
+              🌈 Start New Magic
             </button>
           )}
         </div>
       </main>
 
       <footer className="app-footer">
-        <p>Made with ❤️ and a touch of magic</p>
+        <p>Made with 💖 and unicorn magic</p>
         <div className="footer-sparkles">
-          <span>✨</span>
-          <span>🌟</span>
-          <span>✨</span>
+          <span>🦄</span>
+          <span>�</span>
+          <span>🦄</span>
         </div>
       </footer>
     </div>
