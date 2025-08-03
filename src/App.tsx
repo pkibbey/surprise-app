@@ -20,6 +20,17 @@ interface Particle {
   rotationSpeed: number
 }
 
+interface HappinessDrop {
+  id: number
+  x: number
+  y: number
+  size: number
+  emoji: string
+  opacity: number
+  fadeSpeed: number
+  fallSpeed: number
+}
+
 const surprises: Surprise[] = [
   { type: "Magic Quote", content: "Believe in the magic within you - every unicorn started as a dream! 🦄", emoji: "🦄", color: "#FF69B4", gradient: "linear-gradient(135deg, #FF69B4, #FF1493, #DA70D6)" },
   { type: "Enchanted Activity", content: "Find a rainbow in your day - look through a prism, water droplets, or soap bubbles!", emoji: "🌈", color: "#FFB6C1", gradient: "linear-gradient(135deg, #FFB6C1, #FF69B4, #DDA0DD)" },
@@ -65,6 +76,7 @@ function App() {
   const [message, setMessage] = useState("")
   const [surpriseCount, setSurpriseCount] = useState(0)
   const [particles, setParticles] = useState<Particle[]>([])
+  const [happinessDrops, setHappinessDrops] = useState<HappinessDrop[]>([])
   
   // Secret feature state
   const [konamiSequence, setKonamiSequence] = useState<string[]>([])
@@ -75,6 +87,23 @@ function App() {
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA']
 
   const particleEmojis = ['🦄', '✨', '🌟', '⭐', '💫', '�', '💖', '💝', '🔮', '�‍♀️', '�', '☁️', '💜', '�']
+  const happinessEmojis = ['💧', '💎', '💝', '💖', '✨', '🌟', '💫', '🔮', '🌈', '🦄']
+
+  // Create happiness drops
+  const createHappinessDrop = () => {
+    const newDrop: HappinessDrop = {
+      id: Math.random(),
+      x: Math.random() * window.innerWidth,
+      y: -20,
+      size: Math.random() * 15 + 10,
+      emoji: happinessEmojis[Math.floor(Math.random() * happinessEmojis.length)],
+      opacity: 1,
+      fadeSpeed: Math.random() * 0.01 + 0.005,
+      fallSpeed: Math.random() * 2 + 1
+    }
+    
+    setHappinessDrops(prev => [...prev, newDrop])
+  }
 
   // Create particles
   const createParticles = () => {
@@ -116,6 +145,33 @@ function App() {
     }, 50)
 
     return () => clearInterval(interval)
+  }, [])
+
+  // Animate happiness drops
+  useEffect(() => {
+    const dropInterval = setInterval(() => {
+      // Create new drops randomly
+      if (Math.random() < 0.3) {
+        createHappinessDrop()
+      }
+    }, 800)
+
+    const animationInterval = setInterval(() => {
+      setHappinessDrops(prev => 
+        prev
+          .map(drop => ({
+            ...drop,
+            y: drop.y + drop.fallSpeed,
+            opacity: drop.opacity - drop.fadeSpeed
+          }))
+          .filter(drop => drop.y < window.innerHeight + 50 && drop.opacity > 0)
+      )
+    }, 16)
+
+    return () => {
+      clearInterval(dropInterval)
+      clearInterval(animationInterval)
+    }
   }, [])
 
   // Secret Konami code detection
@@ -174,6 +230,11 @@ function App() {
     setIsAnimating(true)
     createParticles() // Create new particles for each surprise
     
+    // Create extra happiness drops for celebrations!
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => createHappinessDrop(), i * 200)
+    }
+    
     setTimeout(() => {
       let randomSurprise: Surprise
       
@@ -182,6 +243,11 @@ function App() {
         randomSurprise = secretSurprises[Math.floor(Math.random() * secretSurprises.length)]
         setSecretSurprisesFound(prev => prev + 1)
         setMessage("🔮 LEGENDARY SECRET DISCOVERED! 🔮")
+        
+        // Extra magical happiness drops for secret discoveries!
+        for (let i = 0; i < 8; i++) {
+          setTimeout(() => createHappinessDrop(), i * 100)
+        }
       } else {
         randomSurprise = surprises[Math.floor(Math.random() * surprises.length)]
         const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)]
@@ -203,6 +269,7 @@ function App() {
     setKonamiSequence([])
     setMessage("Ready for a new magical adventure! 🦄🌟")
     setParticles([])
+    setHappinessDrops([])
   }
 
   return (
@@ -223,6 +290,26 @@ function App() {
             }}
           >
             {particle.emoji}
+          </div>
+        ))}
+      </div>
+
+      {/* Happiness Drops */}
+      <div className="happiness-drops-container">
+        {happinessDrops.map(drop => (
+          <div
+            key={drop.id}
+            className="happiness-drop"
+            style={{
+              left: `${drop.x}px`,
+              top: `${drop.y}px`,
+              fontSize: `${drop.size}px`,
+              opacity: drop.opacity,
+              filter: 'drop-shadow(0 0 10px rgba(255, 105, 180, 0.8))',
+              animation: 'sparkle 1s infinite alternate'
+            }}
+          >
+            {drop.emoji}
           </div>
         ))}
       </div>
