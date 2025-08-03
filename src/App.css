@@ -548,3 +548,71 @@ body {
     padding: 1.5rem;
   }
 }
+
+/* Secret Mode Styles */
+.secret-counter {
+  margin-top: 8px;
+  font-size: 1rem;
+  color: #8A2BE2;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.secret-count {
+  color: #FFD700;
+  font-size: 1.2rem;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  animation: secretPulse 2s ease-in-out infinite;
+}
+
+.secret-mode-indicator {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #8A2BE2, #9932CC, #BA55D3);
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+  animation: secretGlow 3s ease-in-out infinite;
+  border: 2px solid #FFD700;
+}
+
+.secret-hint {
+  font-size: 0.9rem;
+  margin-top: 5px;
+  color: #FFD700;
+  font-style: italic;
+}
+
+@keyframes secretPulse {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  }
+  50% { 
+    transform: scale(1.1);
+    text-shadow: 0 0 25px rgba(255, 215, 0, 1);
+  }
+}
+
+@keyframes secretGlow {
+  0%, 100% { 
+    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+    transform: translateY(0);
+  }
+  50% { 
+    box-shadow: 0 12px 35px rgba(138, 43, 226, 0.6);
+    transform: translateY(-2px);
+  }
+}
+
+.secret-hint-footer {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  margin-top: 5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}

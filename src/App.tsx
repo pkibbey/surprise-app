@@ -39,6 +39,15 @@ const surprises: Surprise[] = [
   { type: "Unicorn Wisdom", content: "Remember: You are magical exactly as you are - no horn required! 🦄✨", emoji: "🌟", color: "#E6E6FA", gradient: "linear-gradient(135deg, #E6E6FA, #DDA0DD, #FF69B4)" },
 ]
 
+// Secret magical surprises - only accessible through special means!
+const secretSurprises: Surprise[] = [
+  { type: "🔮 Secret Vision", content: "You've discovered the hidden realm! You possess the rare gift of seeing beyond the ordinary into pure magic! The unicorns have chosen you as a keeper of secrets! 🦄👑", emoji: "🔮", color: "#8A2BE2", gradient: "linear-gradient(135deg, #8A2BE2, #9932CC, #BA55D3, #DDA0DD)" },
+  { type: "👑 Royal Unicorn", content: "CONGRATULATIONS! You are now an honorary member of the Royal Unicorn Council! Your secret power: the ability to see magic in everything! 🦄✨👑", emoji: "👑", color: "#FFD700", gradient: "linear-gradient(135deg, #FFD700, #FFA500, #FF69B4, #8A2BE2)" },
+  { type: "🌟 Cosmic Secret", content: "LEGENDARY DISCOVERY: You've unlocked the Cosmic Unicorn frequency! Legend says only 1 in 1000 beings can find this. You're truly special! 🌌🦄💫", emoji: "🌌", color: "#4B0082", gradient: "linear-gradient(135deg, #4B0082, #8A2BE2, #DA70D6, #FFB6C1)" },
+  { type: "🗝️ Ancient Magic", content: "THE ULTIMATE SECRET: You hold the key to the Ancient Unicorn Library! Hidden knowledge flows through you. Guard this magic well, chosen one! 📚🦄🗝️", emoji: "🗝️", color: "#800080", gradient: "linear-gradient(135deg, #800080, #9932CC, #FF69B4, #FFD700)" },
+  { type: "💎 Crystal Power", content: "MYSTICAL ACHIEVEMENT UNLOCKED: The Crystal Unicorns have blessed you with infinite sparkle power! Your aura now shimmers with secret rainbow energy! 💎🦄🌈", emoji: "💎", color: "#C71585", gradient: "linear-gradient(135deg, #C71585, #FF1493, #FF69B4, #DDA0DD, #00CED1)" },
+]
+
 const motivationalMessages = [
   "You're absolutely magical! 🦄✨",
   "Keep sparkling, unicorn! 🌟�",
@@ -56,6 +65,14 @@ function App() {
   const [message, setMessage] = useState("")
   const [surpriseCount, setSurpriseCount] = useState(0)
   const [particles, setParticles] = useState<Particle[]>([])
+  
+  // Secret feature state
+  const [konamiSequence, setKonamiSequence] = useState<string[]>([])
+  const [secretModeUnlocked, setSecretModeUnlocked] = useState(false)
+  const [secretSurprisesFound, setSecretSurprisesFound] = useState(0)
+  
+  // The famous Konami code sequence
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA']
 
   const particleEmojis = ['🦄', '✨', '🌟', '⭐', '💫', '�', '💖', '💝', '🔮', '�‍♀️', '�', '☁️', '💜', '�']
 
@@ -101,6 +118,53 @@ function App() {
     return () => clearInterval(interval)
   }, [])
 
+  // Secret Konami code detection
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      setKonamiSequence(prev => {
+        const newSequence = [...prev, event.code].slice(-konamiCode.length)
+        
+        // Debug log for development (optional)
+        if (newSequence.length >= 3) {
+          console.log('Current sequence:', newSequence.join(' '))
+        }
+        
+        // Check if the sequence matches the Konami code
+        if (newSequence.length === konamiCode.length && 
+            newSequence.every((key, index) => key === konamiCode[index])) {
+          if (!secretModeUnlocked) {
+            setSecretModeUnlocked(true)
+            setMessage("🔮✨ SECRET MODE UNLOCKED! ✨🔮 You've discovered the hidden unicorn realm!")
+            // Create extra magical particles
+            const magicalParticles: Particle[] = []
+            for (let i = 0; i < 50; i++) {
+              magicalParticles.push({
+                id: i + 1000,
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 30 + 15,
+                emoji: ['🔮', '👑', '🌌', '🗝️', '💎', '🦄', '✨'][Math.floor(Math.random() * 7)],
+                velocity: {
+                  x: (Math.random() - 0.5) * 4,
+                  y: (Math.random() - 0.5) * 4
+                },
+                rotation: 0,
+                rotationSpeed: (Math.random() - 0.5) * 6
+              })
+            }
+            setParticles(prev => [...prev, ...magicalParticles])
+          }
+          return []
+        }
+        
+        return newSequence
+      })
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [konamiCode, secretModeUnlocked, konamiSequence])
+
   useEffect(() => {
     // Welcome message
     setMessage("Welcome to your Magical Unicorn Adventure! 🦄✨")
@@ -111,12 +175,21 @@ function App() {
     createParticles() // Create new particles for each surprise
     
     setTimeout(() => {
-      const randomSurprise = surprises[Math.floor(Math.random() * surprises.length)]
+      let randomSurprise: Surprise
+      
+      // 30% chance to get a secret surprise if secret mode is unlocked
+      if (secretModeUnlocked && Math.random() < 0.3) {
+        randomSurprise = secretSurprises[Math.floor(Math.random() * secretSurprises.length)]
+        setSecretSurprisesFound(prev => prev + 1)
+        setMessage("🔮 LEGENDARY SECRET DISCOVERED! 🔮")
+      } else {
+        randomSurprise = surprises[Math.floor(Math.random() * surprises.length)]
+        const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)]
+        setMessage(randomMessage)
+      }
+      
       setCurrentSurprise(randomSurprise)
       setSurpriseCount(prev => prev + 1)
-      
-      const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)]
-      setMessage(randomMessage)
       
       setIsAnimating(false)
     }, 800)
@@ -125,7 +198,10 @@ function App() {
   const resetApp = () => {
     setCurrentSurprise(null)
     setSurpriseCount(0)
-    setMessage("Ready for a new magical adventure! 🦄�")
+    setSecretSurprisesFound(0)
+    setSecretModeUnlocked(false)
+    setKonamiSequence([])
+    setMessage("Ready for a new magical adventure! 🦄🌟")
     setParticles([])
   }
 
@@ -165,7 +241,18 @@ function App() {
           <p className="motivational-message">{message}</p>
           <div className="surprise-counter">
             Magical discoveries: <span className="count">{surpriseCount}</span> 🦄
+            {secretModeUnlocked && (
+              <div className="secret-counter">
+                Secret realm discoveries: <span className="secret-count">{secretSurprisesFound}</span> 🔮
+              </div>
+            )}
           </div>
+          {secretModeUnlocked && (
+            <div className="secret-mode-indicator">
+              ✨ SECRET MODE ACTIVE ✨
+              <div className="secret-hint">Keep clicking for legendary discoveries!</div>
+            </div>
+          )}
         </div>
 
         <div className={`surprise-container ${isAnimating ? 'animating' : ''}`}>
@@ -232,9 +319,14 @@ function App() {
 
       <footer className="app-footer">
         <p>Made with 💖 and unicorn magic</p>
+        {!secretModeUnlocked && (
+          <p className="secret-hint-footer">
+            Psst... ancient legends speak of a mystical code... ↑↑↓↓←→←→BA 🔮
+          </p>
+        )}
         <div className="footer-sparkles">
           <span>🦄</span>
-          <span>�</span>
+          <span>✨</span>
           <span>🦄</span>
         </div>
       </footer>
